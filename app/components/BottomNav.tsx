@@ -99,12 +99,15 @@ export default function BottomNav({
         modifiers={[restrictToHorizontalAxis]}
       >
         <SortableContext
-          items={tabs.map((t) => t.id)}
+          items={tabs.map(({ id }) => id)}
           strategy={horizontalListSortingStrategy}
         >
           <nav className="flex items-center border-t border-gray-300 py-2.5 px-0 bg-white sticky bottom-0 z-30 overflow-x-auto">
             {tabs.map((tab, index) => (
-              <div key={tab.id} className="flex items-center text-gray-400">
+              <div
+                key={tab.id}
+                className="flex items-center text-gray-400 mx-1"
+              >
                 {index > 0 && index < tabs.length && (
                   <InsertButton
                     onClick={() => {

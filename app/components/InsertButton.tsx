@@ -26,7 +26,7 @@ export default function InsertButton({ onClick }: { onClick: () => void }) {
   }, []);
 
   return (
-    <div className="mx-1 inline-block">
+    <div className="inline-block -ml-2">
       <div
         ref={buttonRef}
         onClick={onClick}
@@ -39,7 +39,7 @@ export default function InsertButton({ onClick }: { onClick: () => void }) {
         {hover ? (
           <Plus size={14} color="#000" />
         ) : (
-          <span className="tracking-[4px]">--</span>
+          <span className="tracking-[1px]">---</span>
         )}
       </div>
     </div>

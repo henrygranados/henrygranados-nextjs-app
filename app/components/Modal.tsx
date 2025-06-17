@@ -1,3 +1,5 @@
+import { FileText } from "lucide-react";
+
 export default function Modal({
   title,
   inputValue,
@@ -17,14 +19,17 @@ export default function Modal({
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <button
-          className="absolute top-2 right-2 border-none bg-transparent text-base cursor-pointer"
+          className="absolute -top-3 -right-3 w-7 h-7 flex items-center justify-center rounded-full border border-gray-300 bg-white text-gray-600 text-xl font-light cursor-pointer shadow-sm hover:bg-gray-100"
           onClick={onClose}
           aria-label="Close modal"
         >
-          ×
+          <span className="relative top-[1px]">×</span>
         </button>
 
-        <h2 className="mb-2.5">{title}</h2>
+        <div className="flex items-center mb-2.5">
+          <FileText color="#F6A31D" className="mr-2" />
+          <h2 className="m-0">{title}</h2>
+        </div>
 
         <input value={inputValue} onChange={(e) => onChange(e.target.value)} />
 

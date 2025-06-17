@@ -73,7 +73,7 @@ export default function ContextMenu({
         </MenuItem>
 
         <MenuItem
-          icon={<PenLine size={16} className="mr-2" />}
+          icon={<PenLine size={16} className="mr-2" color="#9EA3B2" />}
           onClick={() => {
             const tab = tabs.find(({ id }) => id === tabId);
             if (tab) {
@@ -86,13 +86,13 @@ export default function ContextMenu({
         </MenuItem>
 
         <MenuItem
-          icon={<Clipboard size={16} className="mr-2" color="#000" />}
+          icon={<Clipboard size={16} className="mr-2" color="#9EA3B2" />}
           onClick={() => {}}
         >
           Copy
         </MenuItem>
         <MenuItem
-          icon={<Copy size={16} className="mr-2" color="#000" />}
+          icon={<Copy size={16} className="mr-2" color="#9EA3B2" />}
           onClick={() => {}}
         >
           Duplicate
@@ -108,6 +108,7 @@ export default function ContextMenu({
             setTabs(tabs.filter(({ id }) => id !== tabId));
             onClose();
           }}
+          textColor="#ea352f"
         >
           Delete
         </MenuItem>

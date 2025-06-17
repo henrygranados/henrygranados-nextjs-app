@@ -2,10 +2,12 @@ export default function MenuItem({
   icon,
   children,
   onClick,
+  textColor,
 }: {
   icon: React.ReactNode;
   children: React.ReactNode;
   onClick: () => void;
+  textColor?: string;
 }) {
   return (
     <div
@@ -19,7 +21,7 @@ export default function MenuItem({
       }}
     >
       {icon}
-      <span>{children}</span>
+      <span style={textColor ? { color: textColor } : undefined}>{children}</span>
     </div>
   );
 }
