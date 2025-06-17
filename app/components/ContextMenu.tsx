@@ -33,7 +33,10 @@ export default function ContextMenu({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
 
-  const moveToFirst = () => {
+  /**
+   * Moves the selected tab to the first position in the tabs array. Updates the tabs state with the new order
+   */
+  const moveToFirstPosition = () => {
     const index = tabs.findIndex(({ id }) => id === tabId);
     if (index > 0) {
       const tab = tabs[index];
@@ -42,12 +45,18 @@ export default function ContextMenu({
     onClose();
   };
 
+  /**
+   * Finds the tab with the matching ID. If found, calls the onRename callback with the tab's ID and current label
+   */
   const handleRename = () => {
     const tab = tabs.find(({ id }) => id === tabId);
     if (tab) onRename(tab.id, tab.label);
     onClose();
   };
 
+  /**
+   * Filters out the tab with the matching ID from the tabs array. Closes the context menu
+   */
   const handleDelete = () => {
     setTabs(tabs.filter(({ id }) => id !== tabId));
     onClose();
@@ -66,13 +75,13 @@ export default function ContextMenu({
       <div className="bg-white pb-0">
         <MenuItem
           icon={<Flag size={16} className="mr-2" color="blue" />}
-          onClick={moveToFirst}
+          onClick={moveToFirstPosition}
         >
           Set as first page
         </MenuItem>
 
         <MenuItem
-          icon={<PenLine size={16} className="mr-2" color="#9EA3B2" />}
+          icon={<PenLine size={16} className="mr-2 " color="#9EA3B2" />}
           onClick={handleRename}
         >
           Rename
