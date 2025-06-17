@@ -28,14 +28,19 @@ export default function Modal({
 
         <div className="flex items-center mb-2.5">
           <FileText color="#F6A31D" className="mr-2" />
-          <h2 className="m-0">{title}</h2>
+          <h2 className="m-0 text-black">{title}</h2>
         </div>
 
-        <input value={inputValue} onChange={(e) => onChange(e.target.value)} />
+        <input
+          value={inputValue}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded text-black"
+          placeholder="Enter text here..."
+        />
 
         <div className="text-right">
           <button
-            className="bg-blue-600 text-white px-4 py-2 rounded border-none cursor-pointer"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg border-none cursor-pointer"
             onClick={onSubmit}
             disabled={!inputValue.trim()}
           >

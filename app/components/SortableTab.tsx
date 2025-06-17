@@ -1,5 +1,4 @@
 import { useSortable } from "@dnd-kit/sortable";
-import { useRef } from "react";
 import { CSS } from "@dnd-kit/utilities";
 import { FileText, EllipsisVertical } from "lucide-react";
 
@@ -16,11 +15,16 @@ export default function SortableTab({
   onClick: () => void;
   onRightClick: (e: React.MouseEvent, rect: DOMRect) => void;
 }) {
-  const { setNodeRef, attributes, listeners, transform, transition } =
-    useSortable({ id });
-
-  const pointerDown = useRef<{ x: number; y: number } | null>(null);
-  const DRAG_THRESHOLD = 5;
+  const {
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id,
+  });
 
   const outerStyle = {
     transform: CSS.Transform.toString(transform),
@@ -34,23 +38,8 @@ export default function SortableTab({
     flexShrink: 0,
     cursor: "grab",
     borderRadius: 8,
+    zIndex: isDragging ? 50 : "auto",
   };
-
-  function handleMouseDown(e: React.MouseEvent<HTMLDivElement>) {
-    pointerDown.current = { x: e.clientX, y: e.clientY };
-  }
-
-  function handleClick(e: React.MouseEvent<HTMLDivElement>) {
-    if (!pointerDown.current) return;
-
-    const dx = Math.abs(e.clientX - pointerDown.current.x);
-    const dy = Math.abs(e.clientY - pointerDown.current.y);
-    pointerDown.current = null;
-
-    if (dx < DRAG_THRESHOLD && dy < DRAG_THRESHOLD) {
-      onClick();
-    }
-  }
 
   return (
     <div
@@ -65,8 +54,7 @@ export default function SortableTab({
     >
       <div
         {...listeners}
-        onMouseDown={handleMouseDown}
-        onClick={handleClick}
+        onClick={onClick}
         role="button"
         tabIndex={0}
         onKeyDown={(e) => {
