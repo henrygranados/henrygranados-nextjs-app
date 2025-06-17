@@ -1,7 +1,7 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { useRef } from "react";
 import { CSS } from "@dnd-kit/utilities";
-import { FileText } from "lucide-react";
+import { FileText, EllipsisVertical } from "lucide-react";
 
 export default function SortableTab({
   id,
@@ -26,12 +26,14 @@ export default function SortableTab({
     transform: CSS.Transform.toString(transform),
     transition,
     margin: 0,
-    borderRadius: 8,
-    border: isActive ? "2px solid #0070f3" : "1px solid #ccc",
+    border: isActive ? "0.5px solid #eee" : "none",
+    color: isActive ? "#000" : "#8C93A1",
+    boxShadow: isActive ? "0 2px 4px rgba(0,0,0,0.05)" : "none",
     backgroundColor: "#fff",
     userSelect: "none" as const,
     flexShrink: 0,
     cursor: "grab",
+    borderRadius: 8,
   };
 
   function handleMouseDown(e: React.MouseEvent<HTMLDivElement>) {
@@ -70,10 +72,18 @@ export default function SortableTab({
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") onClick();
         }}
-        className="px-2.5 py-2 flex items-center justify-center h-full"
+        className={`px-2.5 py-2 flex items-center justify-center h-full rounded-lg ${
+          isActive ? "bg-white" : "bg-gray-100 hover:bg-gray-200"
+        }`}
       >
-        <FileText />
+        <FileText
+          className="mr-1"
+          color={isActive ? "#F6A31D" : "currentColor"}
+        />
         {label}
+        {isActive && (
+          <EllipsisVertical className="ml-1" size={16} color="#6b7280" />
+        )}
       </div>
     </div>
   );

@@ -4,14 +4,14 @@ export default function Modal({
   onChange,
   onClose,
   onSubmit,
-  submitLabel,
+  buttonLabel,
 }: {
   title: string;
   inputValue: string;
   onChange: (val: string) => void;
   onClose: () => void;
   onSubmit: () => void;
-  submitLabel: string;
+  buttonLabel: string;
 }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -34,7 +34,7 @@ export default function Modal({
             onClick={onSubmit}
             disabled={!inputValue.trim()}
           >
-            {submitLabel}
+            {buttonLabel}
           </button>
         </div>
       </div>

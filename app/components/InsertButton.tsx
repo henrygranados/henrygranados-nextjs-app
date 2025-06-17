@@ -1,20 +1,47 @@
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function InsertButton({ onClick }: { onClick: () => void }) {
   const [hover, setHover] = useState(false);
+  const buttonRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!buttonRef.current) return;
+
+      const rect = buttonRef.current.getBoundingClientRect();
+      const isInside =
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom;
+
+      setHover(isInside);
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
 
   return (
-    <div
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      onClick={onClick}
-      className="w-6 h-6 mx-1 flex items-center justify-center rounded-full transition-colors duration-200 ease-in-out cursor-pointer"
-      style={{
-        backgroundColor: hover ? "#f0f0f0" : "transparent",
-      }}
-    >
-      {hover && <Plus size={16} color="#000" />}
+    <div className="mx-1 inline-block">
+      <div
+        ref={buttonRef}
+        onClick={onClick}
+        className="w-5 h-5 flex items-center justify-center rounded-full transition-colors cursor-pointer"
+        style={{
+          backgroundColor: hover ? "#fff" : "transparent",
+          border: hover ? "1px solid #ddd" : "none",
+        }}
+      >
+        {hover ? (
+          <Plus size={14} color="#000" />
+        ) : (
+          <span className="tracking-[4px]">--</span>
+        )}
+      </div>
     </div>
   );
 }

@@ -37,8 +37,8 @@ input {
 
 .menu {
   position: fixed;
-  background-color: #eee;
-  border: 1px solid #ccc;
+  background-color: #fff;
+  border: 1px solid #ddd;
   border-radius: 4;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   z-index: 10000;

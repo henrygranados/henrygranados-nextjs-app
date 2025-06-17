@@ -13,14 +13,15 @@ import {
   SortableContext,
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
+
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { Flag, PenLine, Trash2 } from "lucide-react";
+import { useState } from "react";
 import Modal from "./Modal";
-import MenuItem from "./MenuItem";
 import SortableTab from "./SortableTab";
 import InsertButton from "./InsertButton";
 import AddPageTab from "./AddPageTab";
+import ContextMenu from "./ContextMenu";
 import { Tab } from "../context/TabsContext";
 
 export default function BottomNav({
@@ -45,32 +46,12 @@ export default function BottomNav({
 
   const [renamingTabId, setRenamingTabId] = useState<string | null>(null);
   const [renamingTabName, setRenamingTabName] = useState("");
-  const contextMenuRef = useRef<HTMLDivElement>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: { distance: 5 },
     })
   );
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        contextMenuRef.current &&
-        !contextMenuRef.current.contains(e.target as Node)
-      ) {
-        setContextMenu(null);
-      }
-    };
-
-    if (contextMenu) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [contextMenu]);
 
   /**
    * Reorders tabs when a tab is dragged to a new position by finding the source
@@ -115,6 +96,7 @@ export default function BottomNav({
         sensors={sensors}
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
+        modifiers={[restrictToHorizontalAxis]}
       >
         <SortableContext
           items={tabs.map((t) => t.id)}
@@ -159,67 +141,17 @@ export default function BottomNav({
 
       {/* Context Menu */}
       {contextMenu && (
-        <div
-          ref={contextMenuRef}
-          className="menu"
-          style={{
-            top: contextMenu.y - 170,
-            left: contextMenu.x,
+        <ContextMenu
+          position={{ x: contextMenu.x, y: contextMenu.y }}
+          tabId={contextMenu.tabId}
+          tabs={tabs}
+          setTabs={setTabs}
+          onClose={() => setContextMenu(null)}
+          onRename={(tabId, currentName) => {
+            setRenamingTabId(tabId);
+            setRenamingTabName(currentName);
           }}
-          onClick={() => setContextMenu(null)}
-        >
-          <div className="font-bold text-base px-4 py-2 border-b border-gray-200 text-gray-800 bg-gray-100 select-none">
-            Settings
-          </div>
-
-          <div className="bg-white">
-            {/* Menu Items */}
-            <MenuItem
-              icon={<Flag size={16} className="mr-2" color="blue" />}
-              onClick={() => {
-                const index = tabs.findIndex(
-                  ({ id }) => id === contextMenu.tabId
-                );
-                if (index > 0) {
-                  const tab = tabs[index];
-                  const newTabs = [
-                    tab,
-                    ...tabs.slice(0, index),
-                    ...tabs.slice(index + 1),
-                  ];
-                  setTabs(newTabs);
-                }
-                setContextMenu(null);
-              }}
-            >
-              Set as first page
-            </MenuItem>
-
-            <MenuItem
-              icon={<PenLine size={16} className="mr-2" />}
-              onClick={() => {
-                const tab = tabs.find(({ id }) => id === contextMenu.tabId);
-                if (tab) {
-                  setRenamingTabId(tab.id);
-                  setRenamingTabName(tab.label);
-                }
-                setContextMenu(null);
-              }}
-            >
-              Rename
-            </MenuItem>
-
-            <MenuItem
-              icon={<Trash2 size={16} className="mr-2" color="#ea352f" />}
-              onClick={() => {
-                setTabs(tabs.filter(({ id }) => id !== contextMenu.tabId));
-                setContextMenu(null);
-              }}
-            >
-              Delete
-            </MenuItem>
-          </div>
-        </div>
+        />
       )}
 
       {modalOpen && (
@@ -229,7 +161,7 @@ export default function BottomNav({
           onChange={setNewTabName}
           onClose={() => setModalOpen(false)}
           onSubmit={handleAddTab}
-          submitLabel="Continue"
+          buttonLabel="Continue"
         />
       )}
 
@@ -247,7 +179,7 @@ export default function BottomNav({
             );
             setRenamingTabId(null);
           }}
-          submitLabel="Save"
+          buttonLabel="Save"
         />
       )}
     </>
