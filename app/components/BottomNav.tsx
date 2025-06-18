@@ -102,42 +102,60 @@ export default function BottomNav({
           items={tabs.map(({ id }) => id)}
           strategy={horizontalListSortingStrategy}
         >
-          <nav className="flex items-center border-t border-gray-300 py-2.5 px-0 bg-white sticky bottom-0 z-30 overflow-x-auto">
-            {tabs.map((tab, index) => (
-              <div
-                key={tab.id}
-                className="flex items-center text-gray-400 mx-1"
-              >
-                {index > 0 && index < tabs.length && (
-                  <InsertButton
-                    onClick={() => {
-                      setInsertIndex(index);
-                      setModalOpen(true);
+          <nav className="flex items-center border-t border-gray-300 py-2.5 px-0 bg-white sticky bottom-0 z-30 overflow-x-auto relative">
+            {/* Left section: Tabs and dashed line */}
+            <div className="relative flex items-center z-10">
+              {/* Dashed line behind tabs - only show if there are tabs */}
+              {tabs.length > 0 && (
+                <div
+                  className="absolute top-1/2 left-0 right-0 border-b border-dashed border-gray-300 z-0"
+                  style={{ transform: "translateY(-50%)" }}
+                ></div>
+              )}
+
+              {tabs.map((tab, index) => (
+                <div
+                  key={tab.id}
+                  className="flex items-center text-gray-400 mx-1 relative z-10 navbar-item"
+                >
+                  {index > 0 && (
+                    <InsertButton
+                      onClick={() => {
+                        setInsertIndex(index);
+                        setModalOpen(true);
+                      }}
+                    />
+                  )}
+                  <SortableTab
+                    id={tab.id}
+                    label={tab.label}
+                    isActive={pathname === `/${tab.id}`}
+                    onClick={() => handleTabClick(tab.id)}
+                    onRightClick={(e, rect) => {
+                      e.preventDefault();
+                      setContextMenu({
+                        x: rect.left,
+                        y: rect.top,
+                        tabId: tab.id,
+                      });
                     }}
                   />
-                )}
-                <SortableTab
-                  id={tab.id}
-                  label={tab.label}
-                  isActive={pathname === `/${tab.id}`}
-                  onClick={() => handleTabClick(tab.id)}
-                  onRightClick={(e, rect) => {
-                    e.preventDefault();
-                    setContextMenu({
-                      x: rect.left,
-                      y: rect.top,
-                      tabId: tab.id,
-                    });
-                  }}
-                />
-              </div>
-            ))}
-            <AddPageTab
-              onClick={() => {
-                setInsertIndex(tabs.length);
-                setModalOpen(true);
-              }}
-            />
+                </div>
+              ))}
+
+              {/* Space between last tab and Add Page button */}
+              <div className="w-10"></div>
+            </div>
+
+            {/* Right section: Add Page button only */}
+            <div className="flex-shrink-0 z-10">
+              <AddPageTab
+                onClick={() => {
+                  setInsertIndex(tabs.length);
+                  setModalOpen(true);
+                }}
+              />
+            </div>
           </nav>
         </SortableContext>
       </DndContext>
@@ -157,6 +175,7 @@ export default function BottomNav({
         />
       )}
 
+      {/* Modal for adding new tab */}
       {modalOpen && (
         <Modal
           title="Name your form page"
@@ -168,6 +187,7 @@ export default function BottomNav({
         />
       )}
 
+      {/* Modal for renaming a tab */}
       {renamingTabId && (
         <Modal
           title="Rename Tab"
