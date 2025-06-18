@@ -21,7 +21,7 @@ import Modal from "./Modal";
 import SortableTab from "./SortableTab";
 import InsertButton from "./InsertButton";
 import AddPageTab from "./AddPageTab";
-import ContextMenu from "./ContextMenu";
+import Menu from "./Menu";
 import { Tab } from "../context/TabsContext";
 
 export default function BottomNav({
@@ -159,7 +159,7 @@ export default function BottomNav({
 
       {/* Context Menu */}
       {contextMenu && (
-        <ContextMenu
+        <Menu
           position={{ x: contextMenu.x, y: contextMenu.y }}
           tabId={contextMenu.tabId}
           tabs={tabs}

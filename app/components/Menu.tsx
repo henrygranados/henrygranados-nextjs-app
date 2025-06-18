@@ -3,7 +3,7 @@ import { Clipboard, Copy, Flag, PenLine, Trash2 } from "lucide-react";
 import MenuItem from "./MenuItem";
 import { Tab } from "../context/TabsContext";
 
-type ContextMenuProps = {
+type MenuProps = {
   position: { x: number; y: number };
   tabId: string;
   tabs: Tab[];
@@ -12,14 +12,14 @@ type ContextMenuProps = {
   onRename: (tabId: string, currentName: string) => void;
 };
 
-export default function ContextMenu({
+export default function Menu({
   position,
   tabId,
   tabs,
   setTabs,
   onClose,
   onRename,
-}: ContextMenuProps) {
+}: MenuProps) {
   const contextMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -28,14 +28,10 @@ export default function ContextMenu({
         onClose();
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
 
-  /**
-   * Moves the selected tab to the first position in the tabs array. Updates the tabs state with the new order
-   */
   const moveToFirstPosition = () => {
     const index = tabs.findIndex(({ id }) => id === tabId);
     if (index > 0) {
@@ -45,22 +41,45 @@ export default function ContextMenu({
     onClose();
   };
 
-  /**
-   * Finds the tab with the matching ID. If found, calls the onRename callback with the tab's ID and current label
-   */
   const handleRename = () => {
     const tab = tabs.find(({ id }) => id === tabId);
     if (tab) onRename(tab.id, tab.label);
     onClose();
   };
 
-  /**
-   * Filters out the tab with the matching ID from the tabs array. Closes the context menu
-   */
   const handleDelete = () => {
     setTabs(tabs.filter(({ id }) => id !== tabId));
     onClose();
   };
+
+  const menuItems = [
+    {
+      icon: <Flag size={16} className="mr-2" color="blue" />,
+      label: "Set as first page",
+      onClick: moveToFirstPosition,
+    },
+    {
+      icon: <PenLine size={16} className="mr-2" color="#9EA3B2" />,
+      label: "Rename",
+      onClick: handleRename,
+    },
+    {
+      icon: <Clipboard size={16} className="mr-2" color="#9EA3B2" />,
+      label: "Copy",
+      onClick: onClose,
+    },
+    {
+      icon: <Copy size={16} className="mr-2" color="#9EA3B2" />,
+      label: "Duplicate",
+      onClick: onClose,
+    },
+    {
+      icon: <Trash2 size={16} className="mr-2" color="#ea352f" />,
+      label: "Delete",
+      onClick: handleDelete,
+      textColor: "#ea352f",
+    },
+  ];
 
   return (
     <div
@@ -73,45 +92,26 @@ export default function ContextMenu({
       </div>
 
       <div className="bg-white pb-0">
-        <MenuItem
-          icon={<Flag size={16} className="mr-2" color="blue" />}
-          onClick={moveToFirstPosition}
-        >
-          Set as first page
-        </MenuItem>
+        {menuItems.map((item, index) => {
+          const isLast = index === menuItems.length - 1;
 
-        <MenuItem
-          icon={<PenLine size={16} className="mr-2 " color="#9EA3B2" />}
-          onClick={handleRename}
-        >
-          Rename
-        </MenuItem>
-
-        <MenuItem
-          icon={<Clipboard size={16} className="mr-2" color="#9EA3B2" />}
-          onClick={onClose}
-        >
-          Copy
-        </MenuItem>
-
-        <MenuItem
-          icon={<Copy size={16} className="mr-2" color="#9EA3B2" />}
-          onClick={onClose}
-        >
-          Duplicate
-        </MenuItem>
-
-        <div className="flex justify-center my-1">
-          <hr className="w-[90%] border-gray-200" />
-        </div>
-
-        <MenuItem
-          icon={<Trash2 size={16} className="mr-2" color="#ea352f" />}
-          onClick={handleDelete}
-          textColor="#ea352f"
-        >
-          Delete
-        </MenuItem>
+          return (
+            <div key={`menu-${index}`}>
+              {isLast && (
+                <div className="flex justify-center my-1">
+                  <hr className="w-[90%] border-gray-200" />
+                </div>
+              )}
+              <MenuItem
+                icon={item.icon}
+                onClick={item.onClick}
+                textColor={item.textColor}
+              >
+                {item.label}
+              </MenuItem>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
