@@ -37,7 +37,7 @@ export default function InsertButton({ onClick }: { onClick: () => void }) {
         }}
       >
         {hover && (
-          <span className="flex items-center -ml-px">
+          <span className="flex items-center -ml-4px">
             <Plus size={10} color="#000" />
           </span>
         )}
