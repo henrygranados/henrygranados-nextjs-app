@@ -108,7 +108,7 @@ export default function BottomNav({
               {/* Dashed line behind tabs - only show if there are tabs */}
               {tabs.length > 0 && (
                 <div
-                  className="absolute top-1/2 left-0 right-0 border-b border-dashed border-gray-300 z-0"
+                  className="absolute top-1/2 left-0 right-0 border-b-2 border-dashed border-gray-300 z-0"
                   style={{ transform: "translateY(-50%)" }}
                 ></div>
               )}
@@ -144,7 +144,7 @@ export default function BottomNav({
               ))}
 
               {/* Space between last tab and Add Page button */}
-              <div className="w-10"></div>
+              <div className="w-6"></div>
             </div>
 
             {/* Right section: Add Page button only */}
