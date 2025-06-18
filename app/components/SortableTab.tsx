@@ -26,8 +26,17 @@ export default function SortableTab({
     id,
   });
 
+  // Create a custom transform that only includes translation, not scaling
+  const customTransform = transform ? {
+    x: transform.x,
+    y: transform.y,
+    scaleX: 1,
+    scaleY: 1,
+  } : null;
+
   const outerStyle = {
-    transform: CSS.Transform.toString(transform),
+    // Use custom transform to prevent scaling
+    transform: customTransform ? CSS.Transform.toString(customTransform) : undefined,
     transition,
     margin: 0,
     border: isActive ? "0.5px solid #eee" : "none",
@@ -68,7 +77,7 @@ export default function SortableTab({
           className="mr-1"
           color={isActive ? "#F6A31D" : "currentColor"}
         />
-        {label}
+        <span className="whitespace-nowrap">{label}</span>
         {isActive && (
           <EllipsisVertical className="ml-1" size={16} color="#6b7280" />
         )}
