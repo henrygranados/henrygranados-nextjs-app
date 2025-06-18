@@ -31,5 +31,5 @@ export default function TabPage() {
     redirect("/");
   }
 
-  return <div className="p-8">This is the {tab} tab page</div>;
+  return <div className="p-8">This is the {tab} page</div>;
 }
