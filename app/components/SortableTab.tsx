@@ -27,16 +27,20 @@ export default function SortableTab({
   });
 
   // Create a custom transform that only includes translation, not scaling
-  const customTransform = transform ? {
-    x: transform.x,
-    y: transform.y,
-    scaleX: 1,
-    scaleY: 1,
-  } : null;
+  const customTransform = transform
+    ? {
+        x: transform.x,
+        y: transform.y,
+        scaleX: 1,
+        scaleY: 1,
+      }
+    : null;
 
   const outerStyle = {
     // Use custom transform to prevent scaling
-    transform: customTransform ? CSS.Transform.toString(customTransform) : undefined,
+    transform: customTransform
+      ? CSS.Transform.toString(customTransform)
+      : undefined,
     transition,
     margin: 0,
     border: isActive ? "0.5px solid #eee" : "none",
@@ -47,7 +51,7 @@ export default function SortableTab({
     flexShrink: 0,
     cursor: "grab",
     borderRadius: 8,
-    zIndex: isDragging ? 50 : "auto",
+    zIndex: isDragging ? 50 : 1,
   };
 
   return (

@@ -116,7 +116,7 @@ export default function BottomNav({
               {tabs.map((tab, index) => (
                 <div
                   key={tab.id}
-                  className="flex items-center text-gray-400 mx-1 relative z-10 navbar-item"
+                  className="flex items-center text-gray-400 mx-1 relative navbar-item"
                 >
                   {index > 0 && (
                     <InsertButton
