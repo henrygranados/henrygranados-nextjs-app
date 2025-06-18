@@ -32,6 +32,9 @@ export default function Menu({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
 
+  /**
+   * Moves the selected tab to the first position in the tabs array. Updates the tabs state with the new orderAdd commentMore actions
+   */
   const moveToFirstPosition = () => {
     const index = tabs.findIndex(({ id }) => id === tabId);
     if (index > 0) {
@@ -41,12 +44,18 @@ export default function Menu({
     onClose();
   };
 
+  /**
+   * Finds the tab with the matching ID. If found, calls the onRename callback with the tab's ID and current labelAdd commentMore actions
+   */
   const handleRename = () => {
     const tab = tabs.find(({ id }) => id === tabId);
     if (tab) onRename(tab.id, tab.label);
     onClose();
   };
 
+  /**
+   * Filters out the tab with the matching ID from the tabs array. Closes the context menuAdd commentMore actions
+   */
   const handleDelete = () => {
     setTabs(tabs.filter(({ id }) => id !== tabId));
     onClose();
